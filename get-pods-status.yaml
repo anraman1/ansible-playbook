@@ -4,6 +4,9 @@
   - name: Login to ocp
     shell: oc login https://api-int.lab.ocp.lan:6443 -u ecslab -p "{{ ecslab_passwd }}" --kubeconfig=ecslab-kubeconfig --insecure-skip-tls-verify
   - name: Get pods 
-    shell: oc get pods --kubeconfig=ecslab-kubeconfig
+    shell: oc get pods --kubeconfig=ecslab-kubeconfig -n openshift-config
     register: pod_status
+  - name: pod output
+    debug: 
+     msg: "{{ pod_status }}"
    
