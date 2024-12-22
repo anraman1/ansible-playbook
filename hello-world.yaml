@@ -2,5 +2,5 @@
 - hosts: localhost
   tasks:
   - name: Hello World
-    dmesg: 
+    dbug: 
       msg: "{{ 'Hello, Ansible' }}"
