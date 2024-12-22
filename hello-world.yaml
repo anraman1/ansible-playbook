@@ -3,4 +3,4 @@
   tasks:
   - name: Hello World
     dmesg: 
-      msg: "{{ "Hello, Ansible"}}"
+      msg: "{{ 'Hello, Ansible' }}"
