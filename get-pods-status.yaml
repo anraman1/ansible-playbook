@@ -9,6 +9,9 @@
   - name: pod output
     debug: 
      msg: "{{ pod_status }}"
+  - name: pod status
+    debug: 
+     msg: "{{ pod_status.stdout }}"
   - name: get advance cluster management operator CSV status using json_query
     debug:
       msg: "{{ pod_status.stdout | from_json | json_query('items[*].status.containerStatuses[*].ready') }}"
