@@ -1,0 +1,9 @@
+---
+- hosts: localhost
+  tasks:
+  - name: Login to ocp
+    shell: oc login https://api-int.lab.ocp.lan:6443 -u ecslab -p "{{ ecslab-passwd }}" --kubeconfig=ecslab-kubeconfig
+  - name: Get pods 
+    shell: oc get pods --kubeconfig=ecslab-kubeconfig
+    register: pod_status
+   
