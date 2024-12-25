@@ -1,0 +1,40 @@
+---
+- name: Example playbook for json_query
+  hosts: localhost
+  gather_facts: false
+  vars:
+    json_data:
+    - name: Alice
+      key1: keys
+      role: admin
+    - name: Bob
+      key1: test
+      role: user
+    my_dict:
+      - key1: value1
+      - key2: value2
+    users:
+    - name: Alice
+      key1: test
+      role: admin
+    - name: Bob
+      role: user
+  tasks:
+  - name: get admin user name using json_query
+    debug:
+      msg: "{{ json_data | json_query('[?role==`admin`].name') }}"
+  - name: get admin user name using selectattr
+    debug:
+      msg: "{{ json_data | selectattr('role', 'equalto', 'admin') | map(attribute='name') | list }}"
+  - name: get admin user name using selectattr
+    debug:
+      msg: "{{ json_data | selectattr('role', '!=', 'admin')| type_debug }}"
+  - name: Extract keys from a dictionary
+    set_fact:
+     keys: "{{ my_dict  | selectattr('key1', 'defined')| map(attribute='key1') | list }}"
+  - name: key debug
+    debug:
+      msg: "{{ keys }}"
+  - name: Extract keys from a dictionary - default
+    debug:
+     msg: "{{ my_dict | map(attribute='key1', default='user') | list }}"
