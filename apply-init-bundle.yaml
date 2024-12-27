@@ -1,0 +1,21 @@
+---
+- name: TO apply init bundle
+  hosts: localhost
+  gather_facts: false
+  vars:
+    ecslab_passwd: "ecslab"
+  tasks:
+  - name: Login to ocp
+    shell: oc login https://api-int.lab.ocp.lan:6443 -u ecslab -p "{{ ecslab_passwd }}" --kubeconfig=ecslab-kubeconfig --insecure-skip-tls-verify
+  - name: get all init-bundles
+    set_fact:
+      acs_ini_bundle: >- 
+      "{{ acs_ini_bundle | default([]) + [{'name': item.key, 'content': lookup('env', item.key) | from_json }]
+        if 'init_bundle' in item.key else acs_ini_bundle }}"
+    loop: "{{ lookup('env', '*') | from_json | dict2items }}"
+    loop_control:
+      label: "{{ item.key }}"
+  - name: debug
+    debug:
+      msg: "{{ item | b64decode }}"
+    loop: "{{ acs_ini_bundle|json_query('[?name==`init_bundle`].content') }}"
