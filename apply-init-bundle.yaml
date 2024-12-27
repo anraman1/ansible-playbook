@@ -9,6 +9,8 @@
   - name: Login to ocp
     shell: oc login https://api-int.lab.ocp.lan:6443 -u ecslab -p "{{ ecslab_passwd }}" --kubeconfig=ecslab-kubeconfig --insecure-skip-tls-verify
   - name: apply the init-bundle
+    environment:
+      KUBECONFIG: ecslab-kubeconfig
     shell: echo "{{ ACS_INIT_BUNDLE | b64decode }}" |sed s/-tls$/-tls-"{{ ocp_cluster_name }}"/g | oc apply -f -
     
   # - name: get all init-bundles
