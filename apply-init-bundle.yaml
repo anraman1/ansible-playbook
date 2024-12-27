@@ -11,7 +11,7 @@
   - name: apply the init-bundle
     environment:
       KUBECONFIG: ecslab-kubeconfig
-    shell: echo "{{ lookup('env', 'ACS_INIT_BUNDLE' ) | b64decode }}" |sed s/-tls$/-tls-"{{ ocp_cluster_name }}"/g | oc apply -f -
+    shell: echo "{{ init_bundle | b64decode }}" |sed s/-tls$/-tls-"{{ ocp_cluster_name }}"/g | oc apply -n openshift-config -f -
     
   # - name: get all init-bundles
   #   set_fact:
