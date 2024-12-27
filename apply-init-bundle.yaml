@@ -8,7 +8,9 @@
   tasks:
   - name: Login to ocp
     shell: oc login https://api-int.lab.ocp.lan:6443 -u ecslab -p "{{ ecslab_passwd }}" --kubeconfig=ecslab-kubeconfig --insecure-skip-tls-verify
-  #how to comment below lines ?
+  - name: apply the init-bundle
+    shell: echo "{{ ACS_INIT_BUNDLE | b64decode }}" |sed s/-tls$/-tls-"{{ ocp_cluster_name }}"/g | oc apply -f -
+    
   # - name: get all init-bundles
   #   set_fact:
   #     acs_ini_bundle: >- 
@@ -22,6 +24,4 @@
   #     msg: "{{ item | b64decode }}"
   #   loop: "{{ acs_ini_bundle|json_query('[?name==`init_bundle`].content') }}"
   #   when: acs_ini_bundle|json_query('[?name==`init_bundle`].content')|length > 0
-  - name: apply the init-bundle
-    shell: echo "{{ ACS_INIT_BUNDLE | b64decode }}" |sed s/-tls$/-tls-"{{ ocp_cluster_name }}"/g | oc apply -f -
-    #after b64decode i want appened word ending with -tls with ocp_cluster_name
+
