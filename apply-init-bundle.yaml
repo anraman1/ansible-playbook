@@ -19,3 +19,4 @@
     debug:
       msg: "{{ item | b64decode }}"
     loop: "{{ acs_ini_bundle|json_query('[?name==`init_bundle`].content') }}"
+    when: acs_ini_bundle|json_query('[?name==`init_bundle`].content')|length > 0
